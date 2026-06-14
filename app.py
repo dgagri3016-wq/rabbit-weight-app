@@ -64,10 +64,7 @@ elif input_mode == "Take Picture":
 
 # If the user has provided an image (either via upload or camera)
 if image_data is not None:
-    # Display the uploaded/captured image
-    image = Image.open(image_data)
-    st.image(image, caption="Image for Prediction", use_container_width=True)
-
+   
     if st.button("Predict Weight", type="primary"):
         with st.spinner("Analyzing image..."):
             try:

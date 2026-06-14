@@ -76,32 +76,27 @@ if image_data is not None:
         with st.spinner("Analyzing image..."):
             try:
                 # --- PREPROCESSING ---
-                # Based on model metadata, it expects shape: (None, 264, 192, 3) 
-                # PIL resize takes (width, height), so we use (192, 264)
-                img = image.resize((192, 264))
-                img_array = np.array(img)
+                # --- PREPROCESSING ---
+                # Open the image and force it into standard RGB format
+                # (This perfectly removes transparency and handles grayscale automatically)
+                img = Image.open(image_data).convert('RGB')
                 
-                # Ensure the image has exactly 3 color channels (RGB)
-                if len(img_array.shape) == 2:  # Grayscale image
-                    img_array = np.stack((img_array,)*3, axis=-1)
-                elif img_array.shape[2] == 4:  # RGBA image (remove alpha)
-                    img_array = img_array[:, :, :3]
-                    
-                # Normalize the image (standard for CNNs)
-                img_array = img_array / 255.0
+                # Resize to (width=192, height=264)
+                img = img.resize((192, 264))
                 
-                # Add batch dimension to match (1, 264, 192, 3)
+                # Convert to numpy array and normalize to [0, 1]
+                img_array = np.array(img) / 255.0
+                
+                # Add batch dimension -> (1, 264, 192, 3)
                 img_array = np.expand_dims(img_array, axis=0)
-
                 # --- PREDICTION ---
-                # Model returns a scaled value
                 pred_scaled = model.predict(img_array)
+                
+                # DEBUG: Temporarily show the raw output to see if it changes
+                st.write(f"*(Debug) Raw model prediction:* `{pred_scaled}`")
                 
                 # Use the scaler to convert it back to actual weight
                 pred_weight = scaler.inverse_transform(pred_scaled)
-                
-                # Extract the float value from the numpy array
-                final_weight = pred_weight[0][0]
 
                 st.success(f"### Predicted Weight: {final_weight:.2f} kg") 
                 

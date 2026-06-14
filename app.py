@@ -72,12 +72,21 @@ if image_data is not None:
     if input_mode == "Upload Image":
         st.image(image, caption="Uploaded Image", use_container_width=True)
 
-  if st.button("Predict Weight", type="primary"):
+  # If the user has provided an image (either via upload or camera)
+if image_data is not None:
+    # Open the image so it's ready for prediction
+    image = Image.open(image_data)
+    
+    # ONLY show the extra image if they uploaded a file
+    if input_mode == "Upload Image":
+        st.image(image, caption="Uploaded Image", use_container_width=True)
+
+    if st.button("Predict Weight", type="primary"):
         with st.spinner("Analyzing image..."):
             try:
                 # --- PREPROCESSING ---
                 # Open the image and force it into standard RGB format
-                img = Image.open(image_data).convert('RGB')
+                img = image.convert('RGB')
                 
                 # Resize to (width=192, height=264)
                 img = img.resize((192, 264))
@@ -95,7 +104,7 @@ if image_data is not None:
                 # 2. Use the scaler to convert it back to actual weight (kg)
                 pred_weight = scaler.inverse_transform(pred_scaled)
                 
-                # 3. Extract the exact float value from the nested array (e.g., [[2.5]]) -> 2.5
+                # 3. Extract the exact float value from the nested array
                 final_weight = pred_weight[0][0]
 
                 # 4. Display the result to the user!

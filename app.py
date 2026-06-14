@@ -55,28 +55,27 @@ if input_mode == "Upload Image":
 elif input_mode == "Take Picture":
     image_data = st.camera_input("Take a picture of the rabbit")
 
-# If the user has provided an image (Cleaned up duplicate block)
 if image_data is not None:
-    # Open the image ONCE
+    # Open the image
     image = Image.open(image_data)
     
-    # ONLY show the extra image if they uploaded a file
     if input_mode == "Upload Image":
         st.image(image, caption="Uploaded Image", use_container_width=True)
 
     if st.button("Predict Weight", type="primary"):
         with st.spinner("Analyzing image..."):
             try:
-                # --- PREPROCESSING ---
+                # --- PREPROCESSING (FIXED TO MATCH YOUR WORKING APP) ---
                 img = image.convert('RGB')
                 img = img.resize((192, 264))
                 
-                # Convert to numpy array
-                img_array = np.array(img)
+                # 1. Convert to float32
+                img_array = np.array(img, dtype="float32")
                 
-                # IMPORTANT: If removing this doesn't work, we need to check your other app's code.
-                img_array = img_array / 255.0
+                # 2. Scale to [-1, 1]
+                img_array = (img_array / 127.5) - 1.0
                 
+                # 3. Add batch dimension
                 img_array = np.expand_dims(img_array, axis=0)
 
                 # --- PREDICTION ---

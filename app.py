@@ -8,7 +8,7 @@ import requests
 
 # --- CONFIGURATION ---
 # Replace this URL with the direct download link from your GitHub Releases
-MODEL_URL = "https://github.com/dgagri3016-wq/rabbit-weight-app/releases/download/v1.0/rabbit_weight_model.keras"
+MODEL_URL = "https://github.com/dgagri3016-wq/rabbit-weight-app/releases/rabbit_weight_model.keras"
 MODEL_PATH = "rabbit_weight_model.keras"
 SCALER_PATH = "weight_scaler.pkl"
 

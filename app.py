@@ -55,7 +55,7 @@ model, scaler = load_assets()
 input_mode = st.radio("Select Image Input Method:", ("Upload Image", "Take Picture"))
 
 image_data = None
-
+image = Image.open(image_data)
 # Show the appropriate input widget based on the radio button selection
 if input_mode == "Upload Image":
     image_data = st.file_uploader("Choose a rabbit image...", type=["jpg", "jpeg", "png"])

@@ -72,7 +72,7 @@ if image_data is not None:
     if input_mode == "Upload Image":
         st.image(image, caption="Uploaded Image", use_container_width=True)
 
-    if st.button("Predict Weight", type="primary"):
+  if st.button("Predict Weight", type="primary"):
         with st.spinner("Analyzing image..."):
             try:
                 # --- PREPROCESSING ---
@@ -99,11 +99,6 @@ if image_data is not None:
                 final_weight = pred_weight[0][0]
 
                 # 4. Display the result to the user!
-                st.success(f"### Predicted Weight: {final_weight:.2f} kg") 
-                
-            except Exception as e:
-                st.error(f"An error occurred during prediction: {e}")
-
                 st.success(f"### Predicted Weight: {final_weight:.2f} kg") 
                 
             except Exception as e:

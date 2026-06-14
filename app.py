@@ -55,7 +55,7 @@ model, scaler = load_assets()
 input_mode = st.radio("Select Image Input Method:", ("Upload Image", "Take Picture"))
 
 image_data = None
-image = Image.open(image_data)
+
 # Show the appropriate input widget based on the radio button selection
 if input_mode == "Upload Image":
     image_data = st.file_uploader("Choose a rabbit image...", type=["jpg", "jpeg", "png"])
@@ -64,6 +64,8 @@ elif input_mode == "Take Picture":
 
 # If the user has provided an image (either via upload or camera)
 if image_data is not None:
+    image = Image.open(image_data)
+    st.image(image, caption="Image for Prediction", use_container_width=True)
    
     if st.button("Predict Weight", type="primary"):
         with st.spinner("Analyzing image..."):

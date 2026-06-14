@@ -8,14 +8,14 @@ import requests
 
 # --- CONFIGURATION ---
 # Replace this URL with the direct download link from your GitHub Releases
-MODEL_URL = "https://github.com/YOUR_GITHUB_USERNAME/rabbit-weight-app/releases/download/v1.0/rabbit_weight_model.keras"
+MODEL_URL = "https://github.com/dgagri3016-wq/rabbit-weight-app/releases/download/v1.0/rabbit_weight_model.keras"
 MODEL_PATH = "rabbit_weight_model.keras"
 SCALER_PATH = "weight_scaler.pkl"
 
 st.set_page_config(page_title="Rabbit Weight Predictor", page_icon="🐇")
 
 st.title("🐇 Rabbit Weight Prediction App")
-st.write("Upload an image of a rabbit, and the deep learning model will predict its weight!")
+st.write("Upload an image or take a picture of a rabbit, and the deep learning model will predict its weight!")
 
 # --- LOAD MODEL & SCALER ---
 @st.cache_resource
@@ -51,18 +51,28 @@ def load_assets():
 model, scaler = load_assets()
 
 # --- UI INTERFACE ---
-uploaded_file = st.file_uploader("Choose a rabbit image...", type=["jpg", "jpeg", "png"])
+# Create a radio button to select the input method
+input_mode = st.radio("Select Image Input Method:", ("Upload Image", "Take Picture"))
 
-if uploaded_file is not None:
-    # Display the uploaded image
-    image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+image_data = None
+
+# Show the appropriate input widget based on the radio button selection
+if input_mode == "Upload Image":
+    image_data = st.file_uploader("Choose a rabbit image...", type=["jpg", "jpeg", "png"])
+elif input_mode == "Take Picture":
+    image_data = st.camera_input("Take a picture of the rabbit")
+
+# If the user has provided an image (either via upload or camera)
+if image_data is not None:
+    # Display the uploaded/captured image
+    image = Image.open(image_data)
+    st.image(image, caption="Image for Prediction", use_container_width=True)
 
     if st.button("Predict Weight", type="primary"):
         with st.spinner("Analyzing image..."):
             try:
                 # --- PREPROCESSING ---
-                # Based on your model metadata, it expects shape: (None, 264, 192, 3) 
+                # Based on model metadata, it expects shape: (None, 264, 192, 3) 
                 # PIL resize takes (width, height), so we use (192, 264)
                 img = image.resize((192, 264))
                 img_array = np.array(img)

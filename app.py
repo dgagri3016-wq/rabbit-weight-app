@@ -76,9 +76,7 @@ if image_data is not None:
         with st.spinner("Analyzing image..."):
             try:
                 # --- PREPROCESSING ---
-                # --- PREPROCESSING ---
                 # Open the image and force it into standard RGB format
-                # (This perfectly removes transparency and handles grayscale automatically)
                 img = Image.open(image_data).convert('RGB')
                 
                 # Resize to (width=192, height=264)
@@ -89,14 +87,22 @@ if image_data is not None:
                 
                 # Add batch dimension -> (1, 264, 192, 3)
                 img_array = np.expand_dims(img_array, axis=0)
+
                 # --- PREDICTION ---
+                # 1. Get the scaled prediction from the model
                 pred_scaled = model.predict(img_array)
                 
-                # DEBUG: Temporarily show the raw output to see if it changes
-                st.write(f"*(Debug) Raw model prediction:* `{pred_scaled}`")
-                
-                # Use the scaler to convert it back to actual weight
+                # 2. Use the scaler to convert it back to actual weight (kg)
                 pred_weight = scaler.inverse_transform(pred_scaled)
+                
+                # 3. Extract the exact float value from the nested array (e.g., [[2.5]]) -> 2.5
+                final_weight = pred_weight[0][0]
+
+                # 4. Display the result to the user!
+                st.success(f"### Predicted Weight: {final_weight:.2f} kg") 
+                
+            except Exception as e:
+                st.error(f"An error occurred during prediction: {e}")
 
                 st.success(f"### Predicted Weight: {final_weight:.2f} kg") 
                 

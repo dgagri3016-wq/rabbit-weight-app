@@ -327,17 +327,29 @@ with right_col:
 # =========================
 # FOOTER
 # =========================
-st.markdown("""
-<br>
+st.markdown('<div class="result-card">', unsafe_allow_html=True)
 
-<div class="dashboard-card" style="text-align:center;">
+st.markdown(
+    '<p class="result-title">Predicted Weight</p>',
+    unsafe_allow_html=True
+)
 
-<h4>About This App</h4>
+st.markdown(
+    f'<p class="result-value">{final_weight:.2f} kg</p>',
+    unsafe_allow_html=True
+)
 
-This application estimates rabbit weight from images using a
-deep learning regression model trained with TensorFlow/Keras.
+st.success("✓ Prediction Complete")
 
-Built with ❤️ using Streamlit.
+st.markdown(
+    """
+    <div class="info-box">
+        <strong>🤖 Model:</strong> Rabbit CNN<br>
+        <strong>📐 Input Size:</strong> 192 × 264<br>
+        <strong>⚙️ Framework:</strong> TensorFlow / Keras
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-</div>
-""", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)

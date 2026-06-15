@@ -341,4 +341,3 @@ Built with ❤️ using Streamlit.
 
 </div>
 """, unsafe_allow_html=True)
-```

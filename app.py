@@ -105,7 +105,7 @@ if image_data is not None:
     col1, col2 = st.columns([1.2, 1], gap="large")
     
     with col1:
-        st.image(image, caption="Ready for Analysis", use_container_width=True, border=True)
+        st.image(image, caption="Ready for Analysis", use_container_width=True)
 
     with col2:
         st.write("### 🔮 Analysis")

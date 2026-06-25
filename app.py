@@ -112,7 +112,7 @@ if image_data is not None:
         st.write("Click below to let the AI estimate the weight of this rabbit.")
         
         # Make the button span the full width of its column
-        if st.button("Calculate Weight", type="primary", use_container_width=True):
+        if st.button("Predict Weight", type="primary", use_container_width=True):
             with st.spinner("Analyzing image features..."):
                 try:
                     # --- Corrected Preprocessing ---
